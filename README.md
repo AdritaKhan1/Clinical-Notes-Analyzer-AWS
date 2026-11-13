@@ -2,9 +2,27 @@
 
 A serverless pipeline on AWS that removes personal details from clinical notes, extracts conditions, medications and dosages, stores the de-identified results, and sends an alert when a note mentions something high risk. Everything runs inside a private VPC with no internet access and is built with Terraform.
 
-All data is synthetic. The design follows healthcare security practices such as those expected under Ontario's PHIPA, but this is a portfolio project and is not certified as compliant.
-
 ![Architecture: the journey of one clinical note](docs/screenshots/01-architecture.png)
+
+## Why I built this
+
+In a busy hospital, an important detail can sit in a doctor's note for a while before anyone acts on it. For time-sensitive conditions like a heart attack, stroke or sepsis, that delay matters.
+
+I built this out of curiosity, to test what a future tool might look like: one that reads clinical notes as they arrive and gives staff an early heads-up when a patient might need a closer look. It brings together my Life Sciences and Computer Science backgrounds.
+
+**This is an experiment, not a clinical tool.** Tools like this are never 100% reliable. They can miss details or flag things that don't matter, so any real version would need a person to review every alert and make the decision. Used that way, as an extra set of eyes, something like this could one day help urgent cases get attention sooner.
+
+All data is synthetic. The design follows healthcare security practices such as those expected under Ontario's PHIPA, but it is not certified as compliant.
+
+## Infrastructure highlights
+
+| Area | What I built |
+| --- | --- |
+| Infrastructure as code | 47 resources in modular Terraform (network, storage, processing, audit, monitoring), deployed and torn down with single commands, every change reviewed with `terraform plan` first |
+| Networking | Private VPC with subnets in two Availability Zones and no internet or NAT gateway; gateway and interface VPC endpoints with endpoint policies |
+| Security | Least-privilege IAM, KMS encryption with key rotation, HTTPS-only access, a bucket policy that blocks reading notes from outside the VPC, CloudTrail with log file validation |
+| Reliability and monitoring | Automatic retries, an SQS dead-letter queue, and CloudWatch alarms for errors, stuck notes, slow runs and throttling |
+| Cost control | VPC endpoints instead of a NAT gateway, a budget alert, resource tagging, and same-session teardown: about $0.20 per full test run |
 
 ## How it works
 
@@ -45,7 +63,7 @@ All data is synthetic. The design follows healthcare security practices such as 
 
 ## Test data
 
-Three short hand-written synthetic notes, each labelled "SYNTHETIC TEST NOTE - NOT A REAL PATIENT", plus one note that is too long on purpose. Each was designed to test a different case.
+Three short synthetic notes, written for this project with help from an AI assistant and each labelled "SYNTHETIC TEST NOTE - NOT A REAL PATIENT", plus one note that is too long on purpose. Each was designed to test a different case.
 
 | Note | Contents | What it tests | Result |
 | --- | --- | --- | --- |
@@ -215,3 +233,16 @@ A full test session of about an hour, processing the three sample notes once, co
 - CloudWatch Logs use AWS-owned encryption, not the project key. They contain IDs and counts only.
 - Single-region trail. Production would use an organisation-wide, multi-region trail in a separate audit account.
 - Next: a GitHub Actions pipeline that runs `terraform fmt`, `validate` and `plan` on every push, using OIDC instead of stored keys.
+
+## What I learned
+
+- **S3, Lambda and DynamoDB** can form an automatic, event-driven pipeline with no servers to manage, where an upload triggers everything that follows.
+- **Networking is where most of the design work is.** Keeping a Lambda function fully private means planning subnets, security groups, VPC endpoints and DNS together.
+- **Security works best in layers.** IAM, endpoint policies, bucket policies and encryption each catch mistakes the others might miss.
+- **Failures need a plan.** Retries, a dead-letter queue and alarms turn a silent failure into something you're told about within minutes.
+- **Terraform makes experiments cheap and safe.** Being able to rebuild and delete everything in minutes kept costs to cents, and `plan` caught problems before they cost anything.
+- **AI tools need human review.** Comprehend Medical tagged "ED" (emergency department) as an address, a reminder that automated results should support people, not replace them.
+
+## Acknowledgements
+
+Thank you to the **AWS She Builds** mentorship program and my mentor for encouraging me to get hands-on with the AWS console instead of only reading about it. That push turned studying into building.
