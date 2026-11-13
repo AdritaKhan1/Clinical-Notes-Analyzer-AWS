@@ -1,0 +1,6 @@
+SYNTHETIC TEST NOTE - NOT A REAL PATIENT
+Patient: James Okafor, 34 y/o male, phone 416-555-0199.
+Presents with seasonal allergic rhinitis, sneezing and nasal congestion for two weeks.
+No fever. Lungs clear.
+Plan: cetirizine 10 mg PO once daily and fluticasone nasal spray 2 sprays each nostril daily.
+Follow up as needed.

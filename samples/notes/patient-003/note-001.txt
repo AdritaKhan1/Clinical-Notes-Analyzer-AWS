@@ -1,0 +1,6 @@
+SYNTHETIC TEST NOTE - NOT A REAL PATIENT
+Patient: Priya Raman, 58 y/o female, seen in ED on 2026-10-18.
+Reports substernal chest pain radiating to left arm, onset 2 hours ago, with diaphoresis.
+Hx of hypertension and hyperlipidemia. Takes lisinopril 10 mg daily and atorvastatin 40 mg daily.
+ECG ordered, troponin pending. Given aspirin 325 mg PO and started on heparin infusion.
+Cardiology consulted.

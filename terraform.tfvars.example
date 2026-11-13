@@ -1,0 +1,5 @@
+# Copy this file to terraform.tfvars and fill in your email.
+# terraform.tfvars is in .gitignore so it won't be pushed to GitHub.
+
+alert_email        = "you@example.com"
+region             = "ca-central-1"

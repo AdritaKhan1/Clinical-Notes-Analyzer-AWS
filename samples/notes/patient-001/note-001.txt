@@ -1,0 +1,6 @@
+SYNTHETIC TEST NOTE - NOT A REAL PATIENT
+Patient: Maria Thompson, 67 y/o female. Seen 2026-10-14 at Lakeshore Clinic.
+Hx of atrial fibrillation and type 2 diabetes. Presents for INR check.
+Currently on warfarin 5 mg PO daily and metformin 500 mg BID.
+Denies chest pain or shortness of breath. INR 3.4, slightly above target.
+Plan: reduce warfarin to 4 mg daily, recheck INR in one week.
